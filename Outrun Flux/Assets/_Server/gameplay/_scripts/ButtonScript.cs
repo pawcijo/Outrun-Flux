@@ -7,13 +7,17 @@ public class ButtonScript : MonoBehaviour
 
     GameObject gameMaster;
 
-    private Color standard_color;
+    public Color standard_color;
     public Color custom_color;
     public string input;
+    private bool isPressed = false;
+
+    private Renderer renderer;
     // Use this for initialization
     void Start()
     {
-        standard_color = gameObject.GetComponent<Renderer>().material.color;
+        renderer = gameObject.GetComponent<Renderer>();
+        renderer.material.color = standard_color;
         gameMaster = GameObject.Find("gameMaster");
         gameMaster.SendMessage("addPoints", 1);
     }
@@ -22,23 +26,29 @@ public class ButtonScript : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(input))
+        if (isPressed)
         {
-            gameObject.GetComponent<Renderer>().material.color = custom_color;
+            renderer.material.color = custom_color;
         }
         // gameMaster.SendMessage("addPoints")
-        else if (Input.GetKeyUp(input))
+        else
         {
-            gameObject.GetComponent<Renderer>().material.color = standard_color;
+            renderer.material.color = standard_color;
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (Input.GetKey(input))
+        if (isPressed)
         {
             gameMaster.SendMessage("addPoints", 1);
 
         }
     }
+
+    public void setButtonState(bool state)
+    {
+        isPressed = state;
+    }
+   
 }
